@@ -1,109 +1,80 @@
 import React, { useState } from 'react';
+import './index.css';
 
-export default function App() {
-  const [input, setInput] = useState('');
+function App() {
   const [diamonds, setDiamonds] = useState([]);
-  const [shapeBoxMap, setShapeBoxMap] = useState({});
-  const [nextBox, setNextBox] = useState(1);
 
-  const parseBarcode = (data) => {
-    const parts = data.split(',');
-    if (parts.length < 13) return null;
-    const centWeight = parseFloat(parts[8]);
-    const caratWeight = parseFloat(parts[9]);
-    const clarity = parts[11];
-    const shape = parts[12].toUpperCase();
-
-    return { centWeight, caratWeight, clarity, shape };
-  };
+  const [inputText, setInputText] = useState('');
 
   const handleAdd = () => {
-    const parsed = parseBarcode(input);
-    if (!parsed) return;
-
-    let boxNumber = shapeBoxMap[parsed.shape];
-    const updatedMap = { ...shapeBoxMap };
-
-    if (!boxNumber) {
-      boxNumber = nextBox;
-      updatedMap[parsed.shape] = boxNumber;
-      setShapeBoxMap(updatedMap);
-      setNextBox(nextBox + 1);
+    const parsed = parseDiamondData(inputText);
+    if (parsed) {
+      setDiamonds([...diamonds, parsed]);
+      setInputText('');
+    } else {
+      alert("Invalid barcode data");
     }
-
-    setDiamonds([
-      ...diamonds,
-      {
-        ...parsed,
-        box: boxNumber,
-      },
-    ]);
-    setInput('');
   };
 
-  const getSummary = (filterFn) => {
-    const summary = {};
-    diamonds.filter(filterFn).forEach((d) => {
-      if (!summary[d.shape]) {
-        summary[d.shape] = {
-          box: d.box,
-          count: 0,
-          totalCent: 0,
-          totalCarat: 0,
-        };
-      }
-      summary[d.shape].count += 1;
-      summary[d.shape].totalCent += d.centWeight;
-      summary[d.shape].totalCarat += d.caratWeight;
+  const parseDiamondData = (text) => {
+    const parts = text.split(',');
+    if (parts.length < 13) return null;
+
+    return {
+      centWeight: parseFloat(parts[7]),
+      caratWeight: parseFloat(parts[8]),
+      shape: parts[12],
+    };
+  };
+
+  const groupByShape = (list) => {
+    const grouped = {};
+    list.forEach(d => {
+      if (!grouped[d.shape]) grouped[d.shape] = [];
+      grouped[d.shape].push(d);
     });
-    return summary;
+    return grouped;
   };
 
-  const normalSummary = getSummary((d) => d.caratWeight <= 0.1);
-  const bigSummary = getSummary((d) => d.caratWeight > 0.1);
+  const normalDiamonds = diamonds.filter(d => d.caratWeight <= 0.1);
+  const bigDiamonds = diamonds.filter(d => d.caratWeight > 0.1);
+
+  const renderBoxes = (data, title) => {
+    const grouped = groupByShape(data);
+    return (
+      <div>
+        <h2>{title}</h2>
+        {Object.entries(grouped).map(([shape, list], idx) => {
+          const totalCent = list.reduce((sum, d) => sum + d.centWeight, 0);
+          const totalCarat = list.reduce((sum, d) => sum + d.caratWeight, 0);
+          return (
+            <div className="box" key={shape}>
+              <strong>{idx + 1}. Shape: {shape}</strong>
+              <p>Total Packets: {list.length}</p>
+              <p>Total Cent Weight: {totalCent.toFixed(3)}</p>
+              <p>Total Carat Weight: {totalCarat.toFixed(3)}</p>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-xl font-bold mb-4">Diamond Sorter</h1>
+    <div>
+      <h1>Diamond Sorter</h1>
+      <input
+        type="text"
+        placeholder="Paste barcode data..."
+        value={inputText}
+        onChange={(e) => setInputText(e.target.value)}
+      />
+      <button onClick={handleAdd}>Add</button>
 
-      <div className="flex gap-2 mb-4">
-        <input
-          type="text"
-          className="border px-2 py-1 flex-1"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Paste barcode data..."
-        />
-        <button onClick={handleAdd} className="bg-blue-500 text-white px-4 py-1 rounded">
-          Add
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <h2 className="text-lg font-semibold mb-2">Normal Diamonds (≤ 0.100 ct)</h2>
-          {Object.entries(normalSummary).map(([shape, data]) => (
-            <div key={shape} className="border p-2 rounded mb-2">
-              <strong>Box {data.box} - {shape}</strong><br />
-              Packets: {data.count}<br />
-              Total Cent: {data.totalCent.toFixed(3)}<br />
-              Total Carat: {data.totalCarat.toFixed(3)}
-            </div>
-          ))}
-        </div>
-
-        <div>
-          <h2 className="text-lg font-semibold mb-2 text-red-600">Big Diamonds (> 0.100 ct)</h2>
-          {Object.entries(bigSummary).map(([shape, data]) => (
-            <div key={shape} className="border p-2 rounded mb-2 bg-red-50">
-              <strong>Box {data.box} - {shape}</strong><br />
-              Packets: {data.count}<br />
-              Total Cent: {data.totalCent.toFixed(3)}<br />
-              Total Carat: {data.totalCarat.toFixed(3)}
-            </div>
-          ))}
-        </div>
-      </div>
+      {renderBoxes(normalDiamonds, 'Normal Diamonds (≤ 0.100 ct)')}
+      {renderBoxes(bigDiamonds, 'Big Diamonds (> 0.100 ct)')}
     </div>
   );
 }
+
+export default App;
