@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const App = () => {
   const [input, setInput] = useState('');
   const [diamonds, setDiamonds] = useState([]);
   const [autoMode, setAutoMode] = useState(false);
   const [scannedPackets, setScannedPackets] = useState(new Set());
+
+  const inputRef = useRef(null);
 
   const parseDiamondData = (text) => {
     const parts = text.split(',');
@@ -33,20 +35,25 @@ const App = () => {
     setScannedPackets(prev => new Set(prev).add(diamond.packetNo));
   };
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setInput(value);
-
-    if (autoMode && value.endsWith('\n')) {
-      addDiamond(value.trim());
-      setInput('');
-    }
-  };
-
   const handleAddClick = () => {
     addDiamond(input.trim());
     setInput('');
   };
+
+  // Auto add on input change when autoMode is on
+  useEffect(() => {
+    if (autoMode && input.trim() !== '') {
+      addDiamond(input.trim());
+      setInput('');
+    }
+  }, [input, autoMode]);
+
+  // Always keep input focused
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [input]);
 
   const grouped = diamonds.reduce((acc, d) => {
     const key = `${d.shape}_${d.caratWeight > 0.1 ? 'Big' : 'Normal'}`;
@@ -64,16 +71,16 @@ const App = () => {
           type="checkbox"
           checked={autoMode}
           onChange={() => setAutoMode(!autoMode)}
-        />
-        Auto Scan Mode
+        /> Auto Scan Mode
       </label>
 
       <br /><br />
 
       <input
         type="text"
+        ref={inputRef}
         value={input}
-        onChange={handleChange}
+        onChange={(e) => setInput(e.target.value)}
         placeholder="Scan or paste barcode..."
         autoFocus
       />
@@ -91,7 +98,9 @@ const App = () => {
             <h3>Box {i + 1}: {shape} ({type})</h3>
             <ul>
               {group.map((d, idx) => (
-                <li key={idx}>Cent: {d.centWeight} | Carat: {d.caratWeight} | Packet: {d.packetNo}</li>
+                <li key={idx}>
+                  Cent: {d.centWeight} | Carat: {d.caratWeight} | Packet: {d.packetNo}
+                </li>
               ))}
             </ul>
             <strong>Total Cent: {totalCent}, Carat: {totalCarat}, Packets: {group.length}</strong>
