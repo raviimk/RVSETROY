@@ -1,116 +1,120 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import './App.css';
 
-const App = () => {
+function App() {
   const [input, setInput] = useState('');
+  const [autoScan, setAutoScan] = useState(false);
   const [diamonds, setDiamonds] = useState([]);
-  const [autoMode, setAutoMode] = useState(false);
   const [scannedPackets, setScannedPackets] = useState(new Set());
-
   const inputRef = useRef(null);
 
-  const parseDiamondData = (text) => {
-    const parts = text.split(',');
-    if (parts.length < 15) return null;
-
-    return {
-      centWeight: parseFloat(parts[7]),
-      caratWeight: parseFloat(parts[8]),
-      shape: parts[11],
-      packetNo: parts[14].trim(),
-    };
-  };
-
-  const addDiamond = useCallback((text) => {
-    const diamond = parseDiamondData(text);
-    if (!diamond) return;
-
-    if (scannedPackets.has(diamond.packetNo)) {
-      const confirmAdd = window.confirm(
-        `⚠️ AA PACKET AVI GYU CHE. MOTA TOY KARVUJ CHE ?`
-      );
-      if (!confirmAdd) return;
-    }
-
-    setDiamonds(prev => [...prev, diamond]);
-    setScannedPackets(prev => new Set(prev).add(diamond.packetNo));
-  }, [scannedPackets]);
-
-  const handleAddClick = () => {
-    addDiamond(input.trim());
-    setInput('');
-  };
-
   useEffect(() => {
-  if (!autoMode || input.trim() === '') return;
-
-  const timeout = setTimeout(() => {
-    addDiamond(input.trim());
-    setInput('');
-  }, 300); // Wait 300ms after user stops typing
-
-  return () => clearTimeout(timeout); // Clear previous timeout if input changes quickly
-}, [input, autoMode, addDiamond]);
-
-  useEffect(() => {
-    if (inputRef.current) {
+    if (autoScan && inputRef.current) {
       inputRef.current.focus();
+    }
+  }, [autoScan]);
+
+  useEffect(() => {
+    if (autoScan && input.endsWith('L')) {
+      setTimeout(() => {
+        handleAdd();
+      }, 100);
     }
   }, [input]);
 
+  const parseDiamond = (data) => {
+    const parts = data.split(',');
+    if (parts.length < 16) return null;
+    const cent = parseFloat(parts[7]);
+    const carat = parseFloat(parts[8]);
+    const shape = parts[12];
+    const packet = parts[15];
+    return { cent, carat, shape, packet, raw: data };
+  };
+
+  const handleAdd = () => {
+    const diamond = parseDiamond(input.trim());
+    if (!diamond) return;
+    if (scannedPackets.has(diamond.packet)) {
+      if (!window.confirm('AA PACKET AVI GYU CHE MOTA TOY KARVUJ CHE ?')) {
+        setInput('');
+        return;
+      }
+    }
+    setDiamonds([...diamonds, diamond]);
+    setScannedPackets(new Set([...scannedPackets, diamond.packet]));
+    setInput('');
+  };
+
   const grouped = diamonds.reduce((acc, d) => {
-    const key = `${d.shape}_${d.caratWeight > 0.1 ? 'Big' : 'Normal'}`;
+    const key = `${d.carat > 0.1 ? 'Big' : 'Normal'}-${d.shape}`;
     if (!acc[key]) acc[key] = [];
     acc[key].push(d);
     return acc;
   }, {});
 
+  const handlePrintReceipt = () => {
+    window.print();
+  };
+
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>💎 Diamond Sorter</h1>
-
-      <label>
-        <input
-          type="checkbox"
-          checked={autoMode}
-          onChange={() => setAutoMode(!autoMode)}
-        /> Auto Scan Mode
-      </label>
-
-      <br /><br />
-
+    <div className="App">
+      <h1>Diamond Sorter</h1>
       <input
-        type="text"
         ref={inputRef}
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder="Scan or paste barcode..."
-        autoFocus
+        placeholder="Paste barcode data..."
       />
-      <button onClick={handleAddClick} disabled={autoMode}>Add</button>
+      <button onClick={handleAdd}>Add</button>
+      <label>
+        <input
+          type="checkbox"
+          checked={autoScan}
+          onChange={() => setAutoScan(!autoScan)}
+        />{' '}
+        Auto Scan Mode
+      </label>
 
-      <hr />
-
-      {Object.entries(grouped).map(([key, group], i) => {
-        const [shape, type] = key.split('_');
-        const totalCent = group.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
-        const totalCarat = group.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
-
+      {Object.entries(grouped).map(([key, items]) => {
+        const [size, shape] = key.split('-');
+        const totalCent = items.reduce((sum, d) => sum + d.cent, 0).toFixed(3);
+        const totalCarat = items.reduce((sum, d) => sum + d.carat, 0).toFixed(3);
         return (
-          <div key={key} style={{ marginBottom: '20px', border: '1px solid #ccc', padding: '10px' }}>
-            <h3>Box {i + 1}: {shape} ({type})</h3>
-            <ul>
-              {group.map((d, idx) => (
-                <li key={idx}>
-                  Cent: {d.centWeight} | Carat: {d.caratWeight} | Packet: {d.packetNo}
-                </li>
-              ))}
-            </ul>
-            <strong>Total Cent: {totalCent}, Carat: {totalCarat}, Packets: {group.length}</strong>
+          <div key={key}>
+            <h3>
+              {size} Diamonds - Shape: {shape} (Packets: {items.length})
+            </h3>
+            <p>Total Cent: {totalCent}, Total Carat: {totalCarat}</p>
           </div>
         );
       })}
+
+      <button onClick={handlePrintReceipt} style={{ marginTop: '20px' }}>🧾 Print Receipt</button>
+
+      {/* Hidden receipt for printing */}
+      <div id="receipt-content" style={{ display: 'none' }}>
+        <h3>BLOCKING</h3>
+        <p>FACTORY LALJIBHAI</p>
+        <p>UID No.: 2697</p>
+        <p>{new Date().toLocaleString()}</p>
+        {Object.entries(grouped).map(([key, items]) => {
+          const [size, shape] = key.split('-');
+          const totalCent = items.reduce((sum, d) => sum + d.cent, 0).toFixed(3);
+          const totalCarat = items.reduce((sum, d) => sum + d.carat, 0).toFixed(3);
+          return (
+            <div key={key} style={{ borderTop: '1px solid black', marginTop: '5px' }}>
+              <p>Shape: {shape}</p>
+              <p>Packets: {items.length}</p>
+              <p>Cent: {totalCent}</p>
+              <p>Carat: {totalCarat}</p>
+            </div>
+          );
+        })}
+        <p style={{ marginTop: '10px' }}>Receiver's Sign: __________</p>
+      </div>
     </div>
   );
-};
+}
 
 export default App;
