@@ -41,11 +41,15 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (autoMode && input.trim() !== '') {
-      addDiamond(input.trim());
-      setInput('');
-    }
-  }, [input, autoMode, addDiamond]);
+  if (!autoMode || input.trim() === '') return;
+
+  const timeout = setTimeout(() => {
+    addDiamond(input.trim());
+    setInput('');
+  }, 300); // Wait 300ms after user stops typing
+
+  return () => clearTimeout(timeout); // Clear previous timeout if input changes quickly
+}, [input, autoMode, addDiamond]);
 
   useEffect(() => {
     if (inputRef.current) {
