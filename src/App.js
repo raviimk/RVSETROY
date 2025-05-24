@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 const App = () => {
   const [input, setInput] = useState('');
@@ -16,11 +16,11 @@ const App = () => {
       centWeight: parseFloat(parts[7]),
       caratWeight: parseFloat(parts[8]),
       shape: parts[11],
-      packetNo: parts[14].trim(), // packet number
+      packetNo: parts[14].trim(),
     };
   };
 
-  const addDiamond = (text) => {
+  const addDiamond = useCallback((text) => {
     const diamond = parseDiamondData(text);
     if (!diamond) return;
 
@@ -33,22 +33,20 @@ const App = () => {
 
     setDiamonds(prev => [...prev, diamond]);
     setScannedPackets(prev => new Set(prev).add(diamond.packetNo));
-  };
+  }, [scannedPackets]);
 
   const handleAddClick = () => {
     addDiamond(input.trim());
     setInput('');
   };
 
-  // Auto add on input change when autoMode is on
   useEffect(() => {
     if (autoMode && input.trim() !== '') {
       addDiamond(input.trim());
       setInput('');
     }
-  }, [input, autoMode]);
+  }, [input, autoMode, addDiamond]);
 
-  // Always keep input focused
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
