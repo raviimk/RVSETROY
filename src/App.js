@@ -23,7 +23,7 @@ function App() {
     return {
       centWeight: parseFloat(parts[7]),
       caratWeight: parseFloat(parts[8]),
-      shape: parts[12],
+      shape: parts[11],
     };
   };
 
