@@ -64,58 +64,53 @@ const App = () => {
     return acc;
   }, {});
 
-  const handlePrint = () => {
-    const printWindow = window.open('', '', 'width=400,height=600');
-    const htmlContent = `
-      <html>
-        <head>
-          <title>Receipt</title>
-          <style>
-            body { font-family: Arial; font-size: 12px; padding: 10px; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-            th, td { border: 1px solid #000; padding: 4px; text-align: center; }
-            h3 { margin: 10px 0 5px; }
-          </style>
-        </head>
-        <body>
-          <h2>Diamond Receipt</h2>
-          ${Object.entries(grouped).map(([key, group]) => {
-            const [shape, type] = key.split('_');
-            const totalCent = group.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
-            const totalCarat = group.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
-            return `
-              <div>
-                <h3>${shape} (${type})</h3>
-                <table>
-                  <thead>
-                    <tr><th>Packet</th><th>Cent</th><th>Carat</th></tr>
-                  </thead>
-                  <tbody>
-                    ${group.map(d => `
-                      <tr>
-                        <td>${d.packetNo}</td>
-                        <td>${d.centWeight}</td>
-                        <td>${d.caratWeight}</td>
-                      </tr>
-                    `).join('')}
-                    <tr>
-                      <td><strong>Total</strong></td>
-                      <td><strong>${totalCent}</strong></td>
-                      <td><strong>${totalCarat}</strong></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            `;
-          }).join('')}
-          <div style="margin-top: 30px;">Receiver Sign: __________________</div>
-        </body>
-      </html>
-    `;
-    printWindow.document.write(htmlContent);
-    printWindow.document.close();
-    printWindow.print();
-  };
+const handlePrint = () => {
+  const printWindow = window.open('', '', 'width=400,height=600');
+  const htmlContent = `
+    <html>
+      <head>
+        <title>Receipt</title>
+        <style>
+          body { font-family: Arial; font-size: 12px; padding: 10px; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+          th, td { border: 1px solid #000; padding: 4px; text-align: center; }
+          h3 { margin: 10px 0 5px; }
+        </style>
+      </head>
+      <body>
+        <h2>Diamond Receipt</h2>
+        ${Object.entries(grouped).map(([key, group]) => {
+          const [shape, type] = key.split('_');
+          const totalCent = group.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
+          const totalCarat = group.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
+          const totalPcs = group.length;
+
+          return `
+            <div>
+              <h3>${shape} (${type})</h3>
+              <table>
+                <thead>
+                  <tr><th>Total Pcs</th><th>Cent</th><th>Carat</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>${totalPcs}</td>
+                    <td>${totalCent}</td>
+                    <td>${totalCarat}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          `;
+        }).join('')}
+        <div style="margin-top: 30px;">Receiver Sign: __________________</div>
+      </body>
+    </html>
+  `;
+  printWindow.document.write(htmlContent);
+  printWindow.document.close();
+  printWindow.print();
+};
 
   return (
     <div style={{ padding: '20px' }}>
