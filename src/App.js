@@ -119,6 +119,41 @@ const App = () => {
     printWindow.print();
   };
 
+  const handleSaveToFile = () => {
+    const dataStr = JSON.stringify(diamonds, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "diamond-data.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleLoadFromFile = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const data = JSON.parse(event.target.result);
+        if (Array.isArray(data)) {
+          setDiamonds(data);
+          const packets = new Set(data.map(d => d.packetNo));
+          setScannedPackets(packets);
+        } else {
+          alert('Invalid file format!');
+        }
+      } catch (err) {
+        alert('Failed to load file!');
+      }
+    };
+    reader.readAsText(file);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 p-4 text-gray-800">
       <motion.h1 layout className="text-3xl font-bold mb-4 text-center text-indigo-600">
@@ -158,6 +193,23 @@ const App = () => {
         >
           🧾 Print Receipt
         </button>
+
+        <button
+          onClick={handleSaveToFile}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+        >
+          💾 Save Data
+        </button>
+
+        <label className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition cursor-pointer">
+          📂 Load Data
+          <input
+            type="file"
+            accept="application/json"
+            onChange={handleLoadFromFile}
+            style={{ display: 'none' }}
+          />
+        </label>
       </div>
 
       <div className="grid gap-4">
