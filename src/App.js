@@ -9,6 +9,13 @@ const App = () => {
   const [scannedPackets, setScannedPackets] = useState(new Set());
   const [expandedShape, setExpandedShape] = useState(null);
 
+  const [manual, setManual] = useState({
+    centWeight: '',
+    caratWeight: '',
+    shape: '',
+    packetNo: ''
+  });
+
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -36,34 +43,42 @@ const App = () => {
     };
   };
 
-  const addDiamond = useCallback((text) => {
-    const diamond = parseDiamondData(text);
-    if (!diamond) return;
-
+  const addDiamond = useCallback((diamond) => {
+    if (!diamond || !diamond.packetNo) return;
     if (scannedPackets.has(diamond.packetNo)) {
-      const confirmAdd = window.confirm(
-        `⚠️ AA PACKET AVI GYU CHE. MOTA TOY KARVUJ CHE ?`
-      );
+      const confirmAdd = window.confirm(`⚠️ AA PACKET AVI GYU CHE. MOTA TOY KARVUJ CHE ?`);
       if (!confirmAdd) return;
     }
-
     setDiamonds(prev => [...prev, diamond]);
     setScannedPackets(prev => new Set(prev).add(diamond.packetNo));
   }, [scannedPackets]);
 
   const handleAddClick = () => {
-    addDiamond(input.trim());
+    const diamond = parseDiamondData(input.trim());
+    addDiamond(diamond);
     setInput('');
+  };
+
+  const handleManualAdd = () => {
+    const { centWeight, caratWeight, shape, packetNo } = manual;
+    if (!centWeight || !caratWeight || !shape || !packetNo) return alert('Fill all fields');
+    const diamond = {
+      centWeight: parseFloat(centWeight),
+      caratWeight: parseFloat(caratWeight),
+      shape,
+      packetNo
+    };
+    addDiamond(diamond);
+    setManual({ centWeight: '', caratWeight: '', shape: '', packetNo: '' });
   };
 
   useEffect(() => {
     if (!autoMode || input.trim() === '') return;
-
     const timeout = setTimeout(() => {
-      addDiamond(input.trim());
+      const diamond = parseDiamondData(input.trim());
+      addDiamond(diamond);
       setInput('');
     }, 300);
-
     return () => clearTimeout(timeout);
   }, [input, autoMode, addDiamond]);
 
@@ -104,7 +119,6 @@ const App = () => {
             const totalCent = group.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
             const totalCarat = group.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
             const totalPcs = group.length;
-
             return `
               <div>
                 <h3>${shape} (${type})</h3>
@@ -134,9 +148,8 @@ const App = () => {
 
   const handleSaveToFile = () => {
     const dataStr = JSON.stringify(diamonds, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
+    const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
-
     const now = new Date();
     const dd = String(now.getDate()).padStart(2, '0');
     const mm = String(now.getMonth() + 1).padStart(2, '0');
@@ -146,17 +159,13 @@ const App = () => {
     const ampm = hh >= 12 ? 'PM' : 'AM';
     hh = hh % 12 || 12;
     const hhStr = String(hh).padStart(2, '0');
-
     const filename = `RV_${dd}${mm}${yy}_${hhStr}${min}${ampm}.json`;
-
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = url;
     link.download = filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-
-    // Auto-clear data after save
     setDiamonds([]);
     setScannedPackets(new Set());
     localStorage.removeItem('diamondData');
@@ -165,7 +174,6 @@ const App = () => {
   const handleLoadFromFile = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
@@ -192,54 +200,30 @@ const App = () => {
 
       <div className="flex flex-col md:flex-row gap-4 justify-center items-center mb-6">
         <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={autoMode}
-            onChange={() => setAutoMode(!autoMode)}
-          />
+          <input type="checkbox" checked={autoMode} onChange={() => setAutoMode(!autoMode)} />
           <span className="text-sm">Auto Scan Mode</span>
         </label>
 
-        <input
-          type="text"
-          ref={inputRef}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Scan or paste barcode..."
-          className="border px-3 py-2 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-        />
+        <input type="text" ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} placeholder="Scan or paste barcode..." className="border px-3 py-2 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
 
-        <button
-          onClick={handleAddClick}
-          disabled={autoMode}
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
-        >
-          Add
-        </button>
-
-        <button
-          onClick={handlePrint}
-          className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition"
-        >
-          🧾 Print Receipt
-        </button>
-
-        <button
-          onClick={handleSaveToFile}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-        >
-          💾 Save Data
-        </button>
-
+        <button onClick={handleAddClick} disabled={autoMode} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">Add</button>
+        <button onClick={handlePrint} className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition">🧾 Print Receipt</button>
+        <button onClick={handleSaveToFile} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">💾 Save Data</button>
         <label className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition cursor-pointer">
           📂 Load Data
-          <input
-            type="file"
-            accept="application/json"
-            onChange={handleLoadFromFile}
-            style={{ display: 'none' }}
-          />
+          <input type="file" accept="application/json" onChange={handleLoadFromFile} style={{ display: 'none' }} />
         </label>
+      </div>
+
+      <div className="bg-white border border-gray-300 rounded p-4 mb-6">
+        <h2 className="text-lg font-bold text-gray-700 mb-3">➕ Manual Entry (If QR fails)</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <input type="number" step="0.001" placeholder="Cent Weight" value={manual.centWeight} onChange={(e) => setManual({ ...manual, centWeight: e.target.value })} className="border px-2 py-1 rounded" />
+          <input type="number" step="0.001" placeholder="Carat Weight" value={manual.caratWeight} onChange={(e) => setManual({ ...manual, caratWeight: e.target.value })} className="border px-2 py-1 rounded" />
+          <input type="text" placeholder="Shape" value={manual.shape} onChange={(e) => setManual({ ...manual, shape: e.target.value })} className="border px-2 py-1 rounded" />
+          <input type="text" placeholder="Packet No" value={manual.packetNo} onChange={(e) => setManual({ ...manual, packetNo: e.target.value })} className="border px-2 py-1 rounded" />
+        </div>
+        <button onClick={handleManualAdd} className="mt-3 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition">+ Add Manual</button>
       </div>
 
       <div className="grid gap-4">
@@ -250,48 +234,28 @@ const App = () => {
           const visiblePackets = group.slice(0, 3);
 
           return (
-            <motion.div
-              layout
-              key={key}
-              className="rounded-lg shadow border border-gray-300 bg-white p-4"
-            >
-              <h3 className="text-lg font-semibold text-indigo-700 mb-2">
-                Box {i + 1}: {shape} ({type})
-              </h3>
+            <motion.div layout key={key} className="rounded-lg shadow border border-gray-300 bg-white p-4">
+              <h3 className="text-lg font-semibold text-indigo-700 mb-2">Box {i + 1}: {shape} ({type})</h3>
               <ul className="list-disc pl-6 text-sm mb-2">
                 {visiblePackets.map((d, idx) => (
-                  <li key={idx}>
-                    Cent: {d.centWeight} | Carat: {d.caratWeight} | Packet: {d.packetNo}
-                  </li>
+                  <li key={idx}>Cent: {d.centWeight} | Carat: {d.caratWeight} | Packet: {d.packetNo}</li>
                 ))}
               </ul>
               {group.length > 3 && (
-                <button
-                  onClick={() => toggleSummary(key)}
-                  className="text-xs text-blue-500 hover:underline mb-2"
-                >
+                <button onClick={() => toggleSummary(key)} className="text-xs text-blue-500 hover:underline mb-2">
                   {expandedShape === key ? 'Hide Summary' : 'View Summary'}
                 </button>
               )}
               <AnimatePresence>
                 {expandedShape === key && (
-                  <motion.ul
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="list-disc pl-6 text-sm mb-2"
-                  >
+                  <motion.ul initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="list-disc pl-6 text-sm mb-2">
                     {group.slice(3).map((d, idx) => (
-                      <li key={idx}>
-                        Cent: {d.centWeight} | Carat: {d.caratWeight} | Packet: {d.packetNo}
-                      </li>
+                      <li key={idx}>Cent: {d.centWeight} | Carat: {d.caratWeight} | Packet: {d.packetNo}</li>
                     ))}
                   </motion.ul>
                 )}
               </AnimatePresence>
-              <div className="text-sm font-semibold text-gray-700">
-                Total Cent: {totalCent}, Carat: {totalCarat}, Packets: {group.length}
-              </div>
+              <div className="text-sm font-semibold text-gray-700">Total Cent: {totalCent}, Carat: {totalCarat}, Packets: {group.length}</div>
             </motion.div>
           );
         })}
