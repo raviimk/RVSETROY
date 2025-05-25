@@ -155,6 +155,11 @@ const App = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
+    // Auto-clear data after save
+    setDiamonds([]);
+    setScannedPackets(new Set());
+    localStorage.removeItem('diamondData');
   };
 
   const handleLoadFromFile = (e) => {
