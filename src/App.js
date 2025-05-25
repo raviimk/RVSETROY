@@ -11,6 +11,19 @@ const App = () => {
 
   const inputRef = useRef(null);
 
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem('diamondData'));
+    if (saved && Array.isArray(saved)) {
+      setDiamonds(saved);
+      const packets = new Set(saved.map(d => d.packetNo));
+      setScannedPackets(packets);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('diamondData', JSON.stringify(diamonds));
+  }, [diamonds]);
+
   const parseDiamondData = (text) => {
     const parts = text.split(',');
     if (parts.length < 15) return null;
@@ -119,30 +132,30 @@ const App = () => {
     printWindow.print();
   };
 
- const handleSaveToFile = () => {
-  const dataStr = JSON.stringify(diamonds, null, 2);
-  const blob = new Blob([dataStr], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
+  const handleSaveToFile = () => {
+    const dataStr = JSON.stringify(diamonds, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
 
-  const now = new Date();
-  const dd = String(now.getDate()).padStart(2, '0');
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const yy = String(now.getFullYear()).slice(2);
-  let hh = now.getHours();
-  const min = String(now.getMinutes()).padStart(2, '0');
-  const ampm = hh >= 12 ? 'PM' : 'AM';
-  hh = hh % 12 || 12; // convert 0 -> 12 and 13+ to 1-12
-  const hhStr = String(hh).padStart(2, '0');
+    const now = new Date();
+    const dd = String(now.getDate()).padStart(2, '0');
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const yy = String(now.getFullYear()).slice(2);
+    let hh = now.getHours();
+    const min = String(now.getMinutes()).padStart(2, '0');
+    const ampm = hh >= 12 ? 'PM' : 'AM';
+    hh = hh % 12 || 12;
+    const hhStr = String(hh).padStart(2, '0');
 
-  const filename = `RV_${dd}${mm}${yy}_${hhStr}${min}${ampm}.json`;
+    const filename = `RV_${dd}${mm}${yy}_${hhStr}${min}${ampm}.json`;
 
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleLoadFromFile = (e) => {
     const file = e.target.files[0];
