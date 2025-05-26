@@ -233,6 +233,8 @@ const App = () => {
           const [shape, type] = key.split('_');
           const totalCent = group.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
           const totalCarat = group.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
+          const mainPackets = group.filter(d => d.packetNo.includes('A') || !/[A-Z]/i.test(d.packetNo)).length;
+          const normalPackets = group.length - mainPackets;
           const visiblePackets = group.slice(0, 3);
           const colorStyle = colorMap[i % colorMap.length];
 
@@ -261,7 +263,10 @@ const App = () => {
                 )}
               </AnimatePresence>
               <div className="text-sm font-semibold text-gray-800">
-                Total Cent: {totalCent}, Carat: {totalCarat}, Packets: {group.length}
+                Total Packets: {group.length}<br />
+                Main Packets: {mainPackets}<br />
+                Normal Packets: {normalPackets}<br />
+                Total Cent: {totalCent}, Carat: {totalCarat}
               </div>
             </motion.div>
           );
