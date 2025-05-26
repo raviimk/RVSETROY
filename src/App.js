@@ -96,7 +96,7 @@ const App = () => {
   }, [input]);
 
   const grouped = diamonds.reduce((acc, d) => {
-    const key = `${d.shape}_${d.caratWeight > 0.1 ? 'Big' : 'Normal'}`;
+    const key = separateBig ? `${d.shape}_${d.caratWeight > 0.1 ? 'Big' : 'Normal'}` : d.shape;
     if (!acc[key]) acc[key] = [];
     acc[key].push(d);
     return acc;
@@ -201,6 +201,10 @@ const App = () => {
         <label className="flex items-center gap-2">
           <input type="checkbox" checked={autoMode} onChange={() => setAutoMode(!autoMode)} />
           <span className="text-sm font-medium text-gray-700">Auto Scan Mode</span>
+        </label>
+        <label className="flex items-center gap-2">
+          <input type="checkbox" checked={separateBig} onChange={() => setSeparateBig(!separateBig)} />
+          <span className="text-sm font-medium text-gray-700">Separate Big Diamonds (Carat &gt; 0.100)</span>
         </label>
 
         <input type="text" ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} placeholder="Scan or paste barcode..." className="border px-3 py-2 rounded shadow focus:outline-none focus:ring-2 focus:ring-indigo-400" />
