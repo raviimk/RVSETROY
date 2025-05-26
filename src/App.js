@@ -26,6 +26,8 @@ const App = () => {
     packetNo: ''
   });
 
+  const [separateBig, setSeparateBig] = useState(true);
+
   const inputRef = useRef(null);
 
   useEffect(() => {
