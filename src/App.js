@@ -3,13 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
 
 const colorMap = [
-  'bg-gradient-to-r from-green-200 to-green-50 border-green-500',
-  'bg-gradient-to-r from-yellow-200 to-yellow-50 border-yellow-500',
-  'bg-gradient-to-r from-blue-200 to-blue-50 border-blue-500',
-  'bg-gradient-to-r from-purple-200 to-purple-50 border-purple-500',
-  'bg-gradient-to-r from-pink-200 to-pink-50 border-pink-500',
-  'bg-gradient-to-r from-orange-200 to-orange-50 border-orange-500',
-  'bg-gradient-to-r from-indigo-200 to-indigo-50 border-indigo-500'
+  'border-l-4 border-green-500 bg-green-50',
+  'border-l-4 border-yellow-500 bg-yellow-50',
+  'border-l-4 border-blue-500 bg-blue-50',
+  'border-l-4 border-purple-500 bg-purple-50',
+  'border-l-4 border-pink-500 bg-pink-50',
+  'border-l-4 border-orange-500 bg-orange-50',
+  'border-l-4 border-indigo-500 bg-indigo-50'
 ];
 
 const App = () => {
@@ -245,8 +245,21 @@ const App = () => {
           const colorStyle = colorMap[i % colorMap.length];
 
           return (
-            <motion.div layout key={key} className={`rounded-xl border-2 p-4 shadow-md ${colorStyle}`}>
-              <h3 className="text-lg font-bold uppercase mb-2 tracking-wide text-gray-800">
+            <motion.div layout key={key} className={`rounded-xl border p-4 shadow-md relative ${colorStyle}`}>
+              <button
+                onClick={() => {
+                  const updated = diamonds.filter(d => !group.includes(d));
+                  setDiamonds(updated);
+                  const updatedPackets = new Set(updated.map(d => d.packetNo));
+                  setScannedPackets(updatedPackets);
+                }}
+                className="absolute top-2 right-2 text-red-600 hover:text-red-800 text-lg"
+                title="Delete this box"
+              >
+                🗑
+              </button>
+                       
+              <h3 className="text-lg font-extrabold uppercase mb-4 tracking-wide text-gray-700">
                 Box {i + 1}: <span className="text-indigo-700">{shape}</span> <span className="text-sm text-gray-600">({type})</span>
               </h3>
               <ul className="list-disc pl-6 text-sm mb-2">
