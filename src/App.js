@@ -224,7 +224,7 @@ const App = () => {
       </div>
 
       <div className="bg-white border border-gray-300 rounded-lg shadow p-4 mb-6">
-        <h2 className="text-lg font-bold text-gray-800 mb-3">➕ Manual Entry (If QR fails)</h2>
+        <h2 className="text-lg font-bold text-gray-800 mb-3">CREAT BY RAVII™</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <input type="number" step="0.001" placeholder="Cent Weight" value={manual.centWeight} onChange={(e) => setManual({ ...manual, centWeight: e.target.value })} className="border px-2 py-2 rounded shadow-sm" />
           <input type="number" step="0.001" placeholder="Carat Weight" value={manual.caratWeight} onChange={(e) => setManual({ ...manual, caratWeight: e.target.value })} className="border px-2 py-2 rounded shadow-sm" />
