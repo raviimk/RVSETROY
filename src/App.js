@@ -98,7 +98,7 @@ const App = () => {
   }, [input]);
 
   const grouped = diamonds.reduce((acc, d) => {
-    const key = separateBig ? `${d.shape}_${d.caratWeight > 0.1 ? 'Big' : 'Normal'}` : d.shape;
+    const key = separateBig ? `${d.shape}_${d.caratWeight > 0.100 ? 'Big' : 'Normal'}` : d.shape;
     if (!acc[key]) acc[key] = [];
     acc[key].push(d);
     return acc;
