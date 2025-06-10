@@ -72,6 +72,7 @@ if (existing) {
 
     setDiamonds(prev => [...prev, diamond]);
     setScannedPackets(prev => new Set(prev).add(diamond.packetNo));
+  };
 
   const handleAddClick = () => {
     const diamond = parseDiamondData(input.trim());
