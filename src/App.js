@@ -18,6 +18,7 @@ const App = () => {
   const [autoMode, setAutoMode] = useState(false);
   const [scannedPackets, setScannedPackets] = useState(new Set());
   const [expandedShape, setExpandedShape] = useState(null);
+  const [highlightPacket, setHighlightPacket] = useState(null);
 
   const [manual, setManual] = useState({
     centWeight: '',
@@ -69,7 +70,7 @@ if (existing) {
     if (!confirmAdd) return;
   }
 }
-
+    setHighlightPacket(diamond);
     setDiamonds(prev => [...prev, diamond]);
     setScannedPackets(prev => new Set(prev).add(diamond.packetNo));
   }, [scannedPackets]);
@@ -263,9 +264,15 @@ if (existing) {
           const normalPackets = group.length - mainPackets;
           const visiblePackets = group.slice(0, 3);
           const colorStyle = colorMap[i % colorMap.length];
+          const isHighlighted = group.some(d => d.packetNo === highlightPacket?.packetNo);
 
           return (
-            <motion.div layout key={key} className={`rounded-xl border p-4 shadow-md relative ${colorStyle}`}>
+            <motion.div
+              layout
+              key={key}
+              className={`rounded-xl border-2 p-4 shadow-md relative ${colorStyle} ${isHighlighted ? 'ring-4 ring-indigo-400' : ''}`}
+            >
+
               <button
                 onClick={() => {
                   const updated = diamonds.filter(d => !group.includes(d));
