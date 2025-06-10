@@ -27,7 +27,6 @@ const App = () => {
   });
 
   const [separateBig, setSeparateBig] = useState(true);
-  const [allowDuplicatePackets, setAllowDuplicatePackets] = useState(false);
 
   const inputRef = useRef(null);
 
@@ -55,24 +54,15 @@ const App = () => {
     };
   };
 
-  const existing = diamonds.find(d => d.packetNo === diamond.packetNo);
-if (existing) {
-  const isSame = existing.centWeight === diamond.centWeight &&
-                 existing.caratWeight === diamond.caratWeight &&
-                 existing.shape === diamond.shape;
-
-  if (!isSame) {
-    const confirmAdd = window.confirm(`⚠️ SAME PACKET NO BUT DATA IS DIFFERENT. MOTA TOY KARVUJ CHE?`);
-    if (!confirmAdd) return;
-  } else {
-    const confirmAdd = window.confirm(`⚠️ AA PACKET AVI GYU CHE. MOTA TOY KARVUJ CHE ?`);
-    if (!confirmAdd) return;
-  }
-}
-
+  const addDiamond = useCallback((diamond) => {
+    if (!diamond || !diamond.packetNo) return;
+    if (scannedPackets.has(diamond.packetNo)) {
+      const confirmAdd = window.confirm('⚠️ AA PACKET AVI GYU CHE. MOTA TOY KARVUJ CHE ?');
+      if (!confirmAdd) return;
+    }
     setDiamonds(prev => [...prev, diamond]);
     setScannedPackets(prev => new Set(prev).add(diamond.packetNo));
-  };
+  }, [scannedPackets]);
 
   const handleAddClick = () => {
     const diamond = parseDiamondData(input.trim());
@@ -218,16 +208,6 @@ if (existing) {
           <input type="checkbox" checked={separateBig} onChange={() => setSeparateBig(!separateBig)} />
           <span className="text-sm font-medium text-gray-700">Separate Big Diamonds (Carat &gt; 0.100)</span>
         </label>
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={allowDuplicatePackets}
-            onChange={() => setAllowDuplicatePackets(!allowDuplicatePackets)}
-          />
-          <span className="text-sm font-medium text-gray-700">
-            Allow Same Packet (Diff Weight)
-          </span>
-          </label>
 
         <input type="text" ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} placeholder="Scan or paste barcode..." className="border px-3 py-2 rounded shadow focus:outline-none focus:ring-2 focus:ring-indigo-400" />
 
