@@ -56,24 +56,25 @@ const App = () => {
     };
   };
 
-  const existing = diamonds.find(d => d.packetNo === diamond.packetNo);
-if (existing) {
-  const isSame = existing.centWeight === diamond.centWeight &&
-                 existing.caratWeight === diamond.caratWeight &&
-                 existing.shape === diamond.shape;
+    const existing = diamonds.find(d => d.packetNo === diamond.packetNo);
+    const isSame =
+      existing &&
+      existing.centWeight === diamond.centWeight &&
+      existing.caratWeight === diamond.caratWeight &&
+      existing.shape === diamond.shape;
 
-  if (!isSame) {
-    const confirmAdd = window.confirm(`⚠️ SAME PACKET NO BUT DATA IS DIFFERENT. MOTA TOY KARVUJ CHE?`);
-    if (!confirmAdd) return;
-  } else {
-    const confirmAdd = window.confirm(`⚠️ AA PACKET AVI GYU CHE. MOTA TOY KARVUJ CHE ?`);
-    if (!confirmAdd) return;
-  }
+    if (!isSame) {
+      const confirmAdd = window.confirm('⚠️ SAME PACKET NO BUT DATA IS DIFFERENT. MOTA TOY KARVUJ CHE?');
+      if (!confirmAdd) return;
+    } else {
+      const confirmAdd = window.confirm('⚠️ AA PACKET AVI GYU CHE. MOTA TOY KARVUJ CHE ?');
+      if (!confirmAdd) return;
+    }
 
-  setHighlightPacket(diamond);
-  setDiamonds(prev => [...prev, diamond]);
-  setScannedPackets(prev => new Set(prev).add(diamond.packetNo));
-}, [scannedPackets, diamonds]);
+    setHighlightPacket(diamond);
+    setDiamonds(prev => [...prev, diamond]);
+    setScannedPackets(prev => new Set(prev).add(diamond.packetNo));
+  }, [scannedPackets, diamonds]);
 
   const handleAddClick = () => {
     const diamond = parseDiamondData(input.trim());
