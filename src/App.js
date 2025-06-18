@@ -265,7 +265,7 @@ const handleLoadMultipleFiles = (e) => {
             <motion.div
               layout 
               key={key} 
-              className={`rounded-xl border p-4 shadow-md relative ${colorStyle}`}
+              className={`rounded-xl border p-4 shadow-md relative ${colorStyle} ${isHighlighted ? 'ring-4 ring-indigo-400' : ''}`}
             >
               <button
                 onClick={() => {
