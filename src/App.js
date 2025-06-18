@@ -172,32 +172,9 @@ const App = () => {
     localStorage.removeItem('diamondData');
   };
 
-  const handleLoadFromFile = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const data = JSON.parse(event.target.result);
-        if (Array.isArray(data)) {
-          setDiamonds(data);
-          const packets = new Set(data.map(d => d.packetNo));
-          setScannedPackets(packets);
-        } else {
-          alert('Invalid file format!');
-        }
-      } catch (err) {
-        alert('Failed to load file!');
-      }
-    };
-    reader.readAsText(file);
-  };
-  
 const handleLoadMultipleFiles = (e) => {
   const files = Array.from(e.target.files);
   if (!files.length) return;
-
-  let allData = [];
 
   const readerPromises = files.map(file => {
     return new Promise((resolve) => {
