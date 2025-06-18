@@ -231,11 +231,6 @@ const handleLoadMultipleFiles = (e) => {
 
         <button onClick={handleSaveToFile} className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition font-semibold">💾 Save Data</button>
 
-        <label className="px-4 py-2 bg-yellow-500 text-white rounded shadow hover:bg-yellow-600 transition cursor-pointer font-semibold">
-          📂 Load Data
-          <input type="file" accept="application/json" multiple onChange={handleLoadMultipleFiles} style={{ display: 'none' }} />
-        </label>
-  
         <label className="px-4 py-2 bg-pink-500 text-white rounded shadow hover:bg-pink-600 transition cursor-pointer font-semibold">
           📂 Load Multiple JSONs
           <input type="file" accept="application/json" multiple onChange={handleLoadMultipleFiles} style={{ display: 'none' }} />
