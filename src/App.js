@@ -192,6 +192,43 @@ const App = () => {
     };
     reader.readAsText(file);
   };
+  
+const handleLoadMultipleFiles = (e) => {
+  const files = Array.from(e.target.files);
+  if (!files.length) return;
+
+  let allData = [];
+
+  const readerPromises = files.map(file => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const data = JSON.parse(event.target.result);
+          if (Array.isArray(data)) {
+            resolve(data);
+          } else {
+            resolve([]); // Skip if invalid
+          }
+        } catch {
+          resolve([]);
+        }
+      };
+      reader.readAsText(file);
+    });
+  });
+
+  Promise.all(readerPromises).then(results => {
+    const merged = results.flat();
+    setDiamonds(prev => [...prev, ...merged]);
+    const packets = new Set(merged.map(d => d.packetNo));
+    setScannedPackets(prev => {
+      const newSet = new Set(prev);
+      packets.forEach(p => newSet.add(p));
+      return newSet;
+    });
+  });
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 to-white p-4 text-gray-800">
@@ -219,10 +256,15 @@ const App = () => {
 
         <label className="px-4 py-2 bg-yellow-500 text-white rounded shadow hover:bg-yellow-600 transition cursor-pointer font-semibold">
           📂 Load Data
-          <input type="file" accept="application/json" onChange={handleLoadFromFile} style={{ display: 'none' }} />
+          <input type="file" accept="application/json" multiple onChange={handleLoadMultipleFiles} style={{ display: 'none' }} />
+        </label>
+  
+        <label className="px-4 py-2 bg-pink-500 text-white rounded shadow hover:bg-pink-600 transition cursor-pointer font-semibold">
+          📂 Load Multiple JSONs
+          <input type="file" accept="application/json" multiple onChange={handleLoadMultipleFiles} style={{ display: 'none' }} />
         </label>
       </div>
-
+        
       <div className="bg-white border border-gray-300 rounded-lg shadow p-4 mb-6">
         <h2 className="text-lg font-bold text-gray-800 mb-3">CREAT BY RAVII™</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
