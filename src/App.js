@@ -147,6 +147,56 @@ const App = () => {
     printWindow.print();
   };
 
+  const handleGujaratiPrint = () => {
+  if (!diamonds.length) return alert("😕 PACKET J NATHI SCAN THYU BHAI!");
+
+  const last = diamonds[diamonds.length - 1];
+  const kapan = last.packetNo.split('-')[0];
+  const shapeGujaratiMap = {
+    ROUND: 'રાઉન્ડ',
+    PEAR: 'પાન',
+    EMERALD: 'ચોકી',
+    MARQUISE: 'માર્કિસ'
+  };
+  const shapeGuj = shapeGujaratiMap[last.shape.toUpperCase()] || last.shape;
+
+  const totalPackets = diamonds.length;
+
+  const htmlContent = `
+    <html>
+      <head>
+        <title>Gujarati Receipt</title>
+        <style>
+          body { font-family: 'Noto Sans Gujarati', sans-serif; padding: 10px; font-size: 20px; }
+          .header { display: flex; justify-content: space-between; margin-bottom: 30px; }
+          .center { text-align: center; font-size: 24px; margin: 40px 0; }
+          .footer { text-align: right; font-size: 22px; }
+        </style>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati&display=swap" rel="stylesheet">
+      </head>
+      <body>
+        <div class="header">
+          <div>કાપણ : ${kapan}</div>
+          <div>${shapeGuj}</div>
+        </div>
+        <div class="center">
+          કા.વજન : ${last.centWeight} <br/>
+          તૈ.વજન : ${last.caratWeight}
+        </div>
+        <div class="footer">
+          થાન !<br/>
+          ${totalPackets}
+        </div>
+      </body>
+    </html>
+  `;
+
+  const printWindow = window.open('', '', 'width=400,height=600');
+  printWindow.document.write(htmlContent);
+  printWindow.document.close();
+  printWindow.print();
+};
+
   const handleSaveToFile = () => {
     const dataStr = JSON.stringify(diamonds, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
@@ -230,6 +280,8 @@ const handleLoadMultipleFiles = (e) => {
         <button onClick={handleAddClick} disabled={autoMode} className="px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 transition font-semibold">Add</button>
 
         <button onClick={handlePrint} className="px-4 py-2 bg-indigo-600 text-white rounded shadow hover:bg-indigo-700 transition font-semibold">🧾 Print Receipt</button>
+
+        <button onClick={handleGujaratiPrint} className="px-4 py-2 bg-amber-600 text-white rounded shadow hover:bg-amber-700 transition font-semibold">🖨 Gujarati Receipt</button>
 
         <button onClick={handleSaveToFile} className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition font-semibold">💾 Save Data</button>
 
