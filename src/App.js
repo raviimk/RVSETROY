@@ -147,7 +147,7 @@ const App = () => {
                 </table>
               </div>`;
           }).join('')}
-          ${showPercentage ? `<div style="font-weight: bold; margin-top: 10px;">Percentage: ${percentage}%</div>` : ''}
+          ${showPercentage ? `<div style="font-weight: bold; margin-top: 10px;">Percentage: ${groupPercentage}%</div>` : ''}
           <div style="margin-top: 30px;">Receiver Sign: __________________</div>
         </body>
       </html>`;
