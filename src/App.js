@@ -203,8 +203,8 @@ const App = () => {
 
         <div class="bottom">
           <div class="left-block">
-            <div>કા.વજન : ${last.centWeight}</div>
-            <div>તૈ.વજન : ${last.caratWeight}</div>
+            <div>કા.વજન : ${totalCent}</div>
+            <div>તૈ.વજન : ${totalCarat}</div>
           </div>
           <div class="right-block">થાન : ${grandTotalPcs}</div>
         </div>
