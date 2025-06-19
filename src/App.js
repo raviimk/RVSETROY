@@ -155,7 +155,7 @@ const App = () => {
   const kapan = last.packetNo.split("-")[0];
   const shapeMap = {
     ROUND: "રાઉન્ડ",
-    PEAR: "પેર",
+    PEAR: "પાન",
     EMERALD: "ચોકી",
     MARQUISE: "માર્કિસ",
   };
@@ -201,10 +201,10 @@ const App = () => {
 
         <div class="bottom">
           <div class="left-block">
-            <div>ક. વજન : ${last.centWeight}</div>
-            <div>પ. વજન : ${last.caratWeight}</div>
+            <div>કા.વજન : ${last.centWeight}</div>
+            <div>તૈ.વજન : ${last.caratWeight}</div>
           </div>
-          <div class="right-block">થાન ! ${totalPcs}</div>
+          <div class="right-block">થાન : ${totalPcs}</div>
         </div>
       </body>
     </html>
