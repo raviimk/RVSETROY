@@ -161,8 +161,10 @@ const App = () => {
   };
   const gujaratiShape = shapeMap[last.shape?.toUpperCase()] || last.shape;
     
-  console.log(totalCent, totalCarat, grandTotalPcs); // temp use to satisfy Netlify
-
+  const totalCent = diamonds.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
+  const totalCarat = diamonds.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
+  const grandTotalPcs = diamonds.length;
+    
   const html = `
     <html>
       <head>
