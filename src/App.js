@@ -139,15 +139,15 @@ const App = () => {
           const groupPercentage = groupCent !== 0 ? (groupCarat / groupCent * 100).toFixed(2) : '0.00';
           const totalPcs = group.length;
             return `
-              <div>
-                <h3>${shape} (${type})</h3>
-                <table>
-                  <thead><tr><th>Total Pcs</th><th>Cent</th><th>Carat</th></tr></thead>
-                  <tbody><tr><td>${totalPcs}</td><td>${totalCent}</td><td>${totalCarat}</td></tr></tbody>
-                </table>
-              </div>`;
+              <div>
+                <h3>${shape} (${type})</h3>
+                <table>
+                  <thead><tr><th>Total Pcs</th><th>Cent</th><th>Carat</th></tr></thead>
+                  <tbody><tr><td>${totalPcs}</td><td>${groupCent}</td><td>${groupCarat}</td></tr></tbody>
+                </table>
+                ${showPercentage ? `<div style="font-weight: bold; font-size: 11px;">Percentage: ${groupPercentage}%</div>` : ''}
+              </div>`;
           }).join('')}
-          ${showPercentage ? `<div style="font-weight: bold; margin-top: 10px;">Percentage: ${groupPercentage}%</div>` : ''}
           <div style="margin-top: 30px;">Receiver Sign: __________________</div>
         </body>
       </html>`;
