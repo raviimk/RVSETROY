@@ -133,11 +133,11 @@ const App = () => {
         <body>
           <h2>Diamond Receipt</h2>
           ${Object.entries(grouped).map(([key, group]) => {
-            const [shape, type] = key.split('_');
-            const totalCent = group.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
-            const totalCarat = group.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
-            const percentage = (totalCent !== 0 ? (totalCarat / totalCent * 100).toFixed(2) : '0.00');
-            const totalPcs = group.length;
+          const [shape, type] = key.split('_');
+          const groupCent = group.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
+          const groupCarat = group.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
+          const groupPercentage = groupCent !== 0 ? (groupCarat / groupCent * 100).toFixed(2) : '0.00';
+          const totalPcs = group.length;
             return `
               <div>
                 <h3>${shape} (${type})</h3>
