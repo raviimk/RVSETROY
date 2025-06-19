@@ -163,7 +163,7 @@ const App = () => {
 
   const totalCent = diamonds.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
   const totalCarat = diamonds.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
-  const totalPcs = diamonds.length;
+  const grandTotalPcs = diamonds.length;
 
   const html = `
     <html>
@@ -208,7 +208,7 @@ const App = () => {
             <div>કા.વજન : ${last.centWeight}</div>
             <div>તૈ.વજન : ${last.caratWeight}</div>
           </div>
-          <div class="right-block">થાન : ${totalPcs}</div>
+          <div class="right-block">થાન : ${grandTotalPcs}</div>
         </div>
       </body>
     </html>
