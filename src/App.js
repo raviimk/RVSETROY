@@ -19,6 +19,7 @@ const App = () => {
   const [scannedPackets, setScannedPackets] = useState(new Set());
   const [expandedShape, setExpandedShape] = useState(null);
   const [highlightPacket, setHighlightPacket] = useState(null);
+  const [showPercentage, setShowPercentage] = useState(false);
   const [manual, setManual] = useState({
     centWeight: '',
     caratWeight: '',
@@ -129,6 +130,7 @@ const App = () => {
             const [shape, type] = key.split('_');
             const totalCent = group.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
             const totalCarat = group.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
+            const percentage = (totalCent !== 0 ? (totalCarat / totalCent * 100).toFixed(2) : '0.00');
             const totalPcs = group.length;
             return `
               <div>
@@ -139,6 +141,7 @@ const App = () => {
                 </table>
               </div>`;
           }).join('')}
+          ${showPercentage ? `<div style="font-weight: bold; margin-top: 10px;">Percentage: ${percentage}%</div>` : ''}
           <div style="margin-top: 30px;">Receiver Sign: __________________</div>
         </body>
       </html>`;
@@ -163,7 +166,8 @@ const App = () => {
   const totalCent = diamonds.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
   const totalCarat = diamonds.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
   const grandTotalPcs = diamonds.length;
-    
+  const percentage = (totalCent !== 0 ? (totalCarat / totalCent * 100).toFixed(2) : '0.00');
+  
   const html = `
     <html>
       <head>
@@ -206,6 +210,7 @@ const App = () => {
           <div class="left-block">
             <div>કા.વજન : ${totalCent}</div>
             <div>તૈ.વજન : ${totalCarat}</div>
+            ${showPercentage ? `<div style="font-size:14px;">ટકાવાર : ${percentage}%</div>` : ''}
           </div>
           <div class="right-block">થાન : ${grandTotalPcs}</div>
         </div>
@@ -291,6 +296,10 @@ const handleLoadMultipleFiles = (e) => {
         <label className="flex items-center gap-2">
           <input type="checkbox" checked={autoMode} onChange={() => setAutoMode(!autoMode)} />
           <span className="text-sm font-medium text-gray-700">Auto Scan Mode</span>
+        </label>
+        <label className="flex items-center gap-2">
+          <input type="checkbox" checked={showPercentage} onChange={() => setShowPercentage(!showPercentage)} />
+          <span className="text-sm font-medium text-gray-700">Show % on Receipt</span>
         </label>
         <label className="flex items-center gap-2">
           <input type="checkbox" checked={separateBig} onChange={() => setSeparateBig(!separateBig)} />
