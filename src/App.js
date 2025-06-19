@@ -149,8 +149,12 @@ const App = () => {
               </div>`;
           }).join('')}
           
-          ${showPercentage ? `<div style="font-weight: bold; margin-top: 15px;">Overall Percentage: ${percentage}%</div>` : ''}
-          
+          ${showPercentage ? `
+            <div style="margin-top: 10px; font-size: 13px;">
+              Total Cent: ${totalCent} | Total Carat: ${totalCarat} | Overall %: ${percentage}%
+            </div>
+          ` : ''}
+
           <div style="margin-top: 30px;">Receiver Sign: __________________</div>
         </body>
       </html>`;
