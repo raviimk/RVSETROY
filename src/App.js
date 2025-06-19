@@ -151,7 +151,6 @@ const App = () => {
   const last = diamonds[diamonds.length - 1];
   if (!last) return alert("કોઈ પણ પેકેટ સ્કેન થયેલ નથી!");
 
-  const grandTotalPcs = diamonds.length;
   const kapan = last.packetNo.split("-")[0];
   const shapeMap = {
     ROUND: "રાઉન્ડ",
