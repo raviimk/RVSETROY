@@ -113,6 +113,12 @@ const App = () => {
 
   const handlePrint = () => {
     const printWindow = window.open('', '', 'width=400,height=600');
+    const rawCent = diamonds.reduce((sum, d) => sum + d.centWeight, 0);
+    const rawCarat = diamonds.reduce((sum, d) => sum + d.caratWeight, 0);
+    const totalCent = rawCent.toFixed(3);
+    const totalCarat = rawCarat.toFixed(3);
+    const percentage = rawCent !== 0 ? ((rawCarat / rawCent) * 100).toFixed(2) : '0.00';
+
     const htmlContent = `
       <html>
         <head>
