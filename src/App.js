@@ -148,51 +148,70 @@ const App = () => {
   };
 
   const handleGujaratiPrint = () => {
-  if (!diamonds.length) return alert("😕 PACKET J NATHI SCAN THYU BHAI!");
-
   const last = diamonds[diamonds.length - 1];
-  const kapan = last.packetNo.split('-')[0];
-  const shapeGujaratiMap = {
-    ROUND: 'રાઉન્ડ',
-    PEAR: 'પાન',
-    EMERALD: 'ચોકી',
-    MARQUISE: 'માર્કિસ'
+  if (!last) return alert("કોઈ પણ પેકેટ સ્કેન થયેલ નથી!");
+
+  const totalPcs = diamonds.length;
+  const kapan = last.packetNo.split("-")[0];
+  const shapeMap = {
+    ROUND: "રાઉન્ડ",
+    PEAR: "પેર",
+    EMERALD: "ચોકી",
+    MARQUISE: "માર્કિસ",
   };
-  const shapeGuj = shapeGujaratiMap[last.shape.toUpperCase()] || last.shape;
+  const gujaratiShape = shapeMap[last.shape?.toUpperCase()] || last.shape;
 
-  const totalPackets = diamonds.length;
-
-  const htmlContent = `
+  const html = `
     <html>
       <head>
         <title>Gujarati Receipt</title>
         <style>
-          body { font-family: 'Noto Sans Gujarati', sans-serif; padding: 10px; font-size: 20px; }
-          .header { display: flex; justify-content: space-between; margin-bottom: 30px; }
-          .center { text-align: center; font-size: 24px; margin: 40px 0; }
-          .footer { text-align: right; font-size: 22px; }
+          body {
+            font-family: 'Noto Sans Gujarati', sans-serif;
+            font-size: 16px;
+            padding: 10px 15px;
+            box-sizing: border-box;
+          }
+          .top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            font-weight: bold;
+          }
+          .bottom {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            font-weight: bold;
+          }
+          .left-block {
+            text-align: left;
+            line-height: 1.6;
+          }
+          .right-block {
+            text-align: right;
+          }
         </style>
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati&display=swap" rel="stylesheet">
       </head>
       <body>
-        <div class="header">
-          <div>કાપણ : ${kapan}</div>
-          <div>${shapeGuj}</div>
+        <div class="top">
+          <div>કાપણ ${kapan}</div>
+          <div>${gujaratiShape}</div>
         </div>
-        <div class="center">
-          કા.વજન : ${last.centWeight} <br/>
-          તૈ.વજન : ${last.caratWeight}
-        </div>
-        <div class="footer">
-          થાન !<br/>
-          ${totalPackets}
+
+        <div class="bottom">
+          <div class="left-block">
+            <div>ક. વજન : ${last.centWeight}</div>
+            <div>પ. વજન : ${last.caratWeight}</div>
+          </div>
+          <div class="right-block">થાન ! ${totalPcs}</div>
         </div>
       </body>
     </html>
   `;
 
   const printWindow = window.open('', '', 'width=400,height=600');
-  printWindow.document.write(htmlContent);
+  printWindow.document.write(html);
   printWindow.document.close();
   printWindow.print();
 };
