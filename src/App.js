@@ -227,7 +227,7 @@ const App = () => {
           <div class="left-block">
             <div>કા.વજન : ${totalCent}</div>
             <div>તૈ.વજન : ${totalCarat}</div>
-            ${showPercentage ? `<div style="font-size:14px;">ટકાવાર : ${percentage}%</div>` : ''}
+            ${showPercentage ? `<div style="font-size:14px;">ટકા : ${percentage}%</div>` : ''}
           </div>
           <div class="right-block">થાન : ${grandTotalPcs}</div>
         </div>
