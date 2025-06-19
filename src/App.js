@@ -148,6 +148,9 @@ const App = () => {
                 ${showPercentage ? `<div style="font-weight: bold; font-size: 11px;">Percentage: ${groupPercentage}%</div>` : ''}
               </div>`;
           }).join('')}
+          
+          ${showPercentage ? `<div style="font-weight: bold; margin-top: 15px;">Overall Percentage: ${percentage}%</div>` : ''}
+          
           <div style="margin-top: 30px;">Receiver Sign: __________________</div>
         </body>
       </html>`;
