@@ -163,10 +163,14 @@ const App = () => {
   };
   const gujaratiShape = shapeMap[last.shape?.toUpperCase()] || last.shape;
     
-  const totalCent = diamonds.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
-  const totalCarat = diamonds.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
-  const grandTotalPcs = diamonds.length;
-  const percentage = (totalCent !== 0 ? (totalCarat / totalCent * 100).toFixed(2) : '0.00');
+  const rawCent = diamonds.reduce((sum, d) => sum + d.centWeight, 0);
+  const rawCarat = diamonds.reduce((sum, d) => sum + d.caratWeight, 0);
+
+  const totalCent = rawCent.toFixed(3);
+  const totalCarat = rawCarat.toFixed(3);
+  const percentage = rawCent !== 0 ? ((rawCarat / rawCent) * 100).toFixed(2) : '0.00';
+    
+  const grandTotalPcs = diamonds.length;
   
   const html = `
     <html>
