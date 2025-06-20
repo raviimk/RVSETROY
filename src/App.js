@@ -230,7 +230,7 @@ const App = () => {
             <div>તૈ.વજન : ${totalCarat}</div>
             ${showPercentage ? `<div style="font-size:14px;">ટકા : ${percentage}%</div>` : ''}
           </div>
-          ${showPercentage ? `<div class="right-block">મેઈન પેકેટ : ${mainPackets}</div>` : ''}
+          ${showPercentage ? `<div class="right-block">મેન : ${mainPackets}</div>` : ''}
           <div class="right-block">થાન : ${grandTotalPcs}</div>
         </div>
       </body>
