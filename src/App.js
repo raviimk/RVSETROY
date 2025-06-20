@@ -316,7 +316,7 @@ const handleLoadMultipleFiles = (e) => {
         </label>
         <label className="flex items-center gap-2">
           <input type="checkbox" checked={showPercentage} onChange={() => setShowPercentage(!showPercentage)} />
-          <span className="text-sm font-medium text-gray-700">Show % on Receipt</span>
+          <span className="text-sm font-medium text-gray-700"> % </span>
         </label>
         <label className="flex items-center gap-2">
           <input type="checkbox" checked={separateBig} onChange={() => setSeparateBig(!separateBig)} />
