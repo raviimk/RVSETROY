@@ -182,7 +182,8 @@ const App = () => {
   const totalCent = rawCent.toFixed(3);
   const totalCarat = rawCarat.toFixed(3);
   const percentage = rawCent !== 0 ? ((rawCarat / rawCent) * 100).toFixed(2) : '0.00';
-    
+  const mainPackets = diamonds.filter(d => /[Aa]$/.test(d.packetNo)).length;
+  
   const grandTotalPcs = diamonds.length;
   
   const html = `
@@ -229,6 +230,7 @@ const App = () => {
             <div>તૈ.વજન : ${totalCarat}</div>
             ${showPercentage ? `<div style="font-size:14px;">ટકા : ${percentage}%</div>` : ''}
           </div>
+          ${showPercentage ? `<div class="right-block">મેઈન પેકેટ : ${mainPackets}</div>` : ''}
           <div class="right-block">થાન : ${grandTotalPcs}</div>
         </div>
       </body>
