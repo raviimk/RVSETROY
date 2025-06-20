@@ -169,7 +169,7 @@ const App = () => {
 
   const kapan = last.packetNo.split("-")[0];
   const shapeMap = {
-    ROUND: "રાઉન્ડ",
+    ROUND: "રાઉન્ડ 4P",
     PEAR: "પાન",
     EMERALD: "ચોકી",
     MARQUISE: "માર્કિસ",
