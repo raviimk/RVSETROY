@@ -308,7 +308,19 @@ const handleLoadMultipleFiles = (e) => {
     });
   });
 };
-
+  
+console.log(
+  setAutoMode,
+  setShowPercentage,
+  setSeparateBig,
+  handleAddClick,
+  handleManualAdd,
+  handlePrint,
+  handleGujaratiPrint,
+  handleSaveToFile,
+  handleLoadMultipleFiles
+);
+  
   return (
   <Router>
     <Routes>
