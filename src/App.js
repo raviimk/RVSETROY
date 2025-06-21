@@ -327,11 +327,10 @@ const handleLoadMultipleFiles = (e) => {
                   </button>
                 </a>
               </div>
-      <Route
-        path="/packet-verifier"
-        element={<PacketVerifier />}
-      />
+            
+      <Route path="/packet-verifier" element={<PacketVerifier />} />
     </Routes>
+  </Router>
 
       <div className="flex flex-col md:flex-row gap-4 justify-center items-center mb-6">
         <label className="flex items-center gap-2">
