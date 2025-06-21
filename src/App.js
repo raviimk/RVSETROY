@@ -165,7 +165,7 @@ const App = () => {
 
   const handleGujaratiPrint = () => {
   const last = diamonds[diamonds.length - 1];
-  if (!last) return alert("કોઈ પણ પેકેટ સ્કેન થયેલ નથી!");
+  if (!last) return alert("PACKET TO SCAN KAR MARA KAEJAA 💎!");
 
   const kapan = last.packetNo.split("-")[0];
   const shapeMap = {
@@ -231,7 +231,7 @@ const App = () => {
             ${showPercentage ? `<div style="font-size:14px;">ટકા : ${percentage}%</div>` : ''}
           </div>
           <div class="right-block">
-            ${showPercentage ? `<div>મેઈન : ${mainPackets}</div>` : ''}
+            ${showPercentage ? `<div>મેન : ${mainPackets}</div>` : ''}
             <div>થાન : ${grandTotalPcs}</div>
           </div>
         </div>
