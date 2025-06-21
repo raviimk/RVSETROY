@@ -401,5 +401,6 @@ const handleLoadMultipleFiles = (e) => {
     </Routes>
   </Router>
 );
+}
 
 export default App;
