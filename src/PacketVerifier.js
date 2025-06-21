@@ -8,29 +8,24 @@ export default function PacketVerifier() {
   const [inputValue, setInputValue] = useState('');
 
   const fetchBunchData = async () => {
-    if (!bunchNo) return alert('Please enter bunch no');
-    const filterJSON = JSON.stringify([
-      { field: 'BUNCHNO', op: 'eq', data: bunchNo }
-    ]);
-    const url = `http://192.168.192.253/Common/BindMastersDetails?serviceName=STOCK_GALAXY_LOTMAKING_DETAIL_GET&myfilters=${encodeURIComponent(filterJSON)}&page=1&rows=100`;
+  try {
+    const res = await fetch("/bunch.json");
+    const packets = await res.json();
 
-    try {
-      const res = await fetch(url);
-      const result = await res.json();
-      const packets = result.rows || [];
-      const formatted = packets.map(pkt => ({
-        packetNo: pkt.STONENAME,
-        shape: pkt.Shape,
-        centWeight: parseFloat(pkt['Ro Wgt']) || 0,
-        caratWeight: parseFloat(pkt['EP Wgt']) || 0,
-      }));
-      setServerPackets(formatted);
-      setScannedPackets([]);
-      setExtraPackets([]);
-    } catch (err) {
-      alert('Server error fetching bunch data');
-    }
-  };
+    const formatted = packets.map(pkt => ({
+      packetNo: pkt.packetNo,
+      shape: pkt.shape || "UNKNOWN",
+      centWeight: pkt.cent || 0,
+      caratWeight: pkt.carat || 0,
+    }));
+
+    setServerPackets(formatted);
+    setScannedPackets([]);
+    setExtraPackets([]);
+  } catch (err) {
+    alert("Error loading local bunch.json data");
+  }
+};
 
   const handleScan = (e) => {
     if (e.key === 'Enter') {
