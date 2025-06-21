@@ -315,18 +315,19 @@ const handleLoadMultipleFiles = (e) => {
       <Route
         path="/"
         element={
-          <div className="min-h-screen bg-gradient-to-br from-slate-100 to-white p-4 text-gray-800">
-            <motion.h1 layout className="text-4xl font-extrabold mb-6 text-center text-indigo-700 drop-shadow">
-              💎 Diamond Sorter
-            </motion.h1>
+          <>
+            <div className="min-h-screen bg-gradient-to-br from-slate-100 to-white p-4 text-gray-800">
+              <motion.h1 layout className="text-4xl font-extrabold mb-6 text-center text-indigo-700 drop-shadow">
+                💎 Diamond Sorter
+              </motion.h1>
 
-            <div className="text-center mb-4">
-              <a href="/packet-verifier">
-                <button className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 transition font-semibold">
-                  Go to Packet Verifier
-                </button>
-              </a>
-            </div>
+              <div className="text-center mb-4">
+                <a href="/packet-verifier">
+                  <button className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 transition font-semibold">
+                    Go to Packet Verifier
+                  </button>
+                </a>
+              </div>
 
             <div className="flex flex-col md:flex-row gap-4 justify-center items-center mb-6">
               <label className="flex items-center gap-2">
