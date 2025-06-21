@@ -165,7 +165,7 @@ const App = () => {
 
   const handleGujaratiPrint = () => {
   const last = diamonds[diamonds.length - 1];
-  if (!last) return alert("PACKET TO SCAN KAR MARA KAEJAA 💎!");
+  if (!last) return alert("PACKET TO SCAN KAR MARA KALEJAA 💎!");
 
   const kapan = last.packetNo.split("-")[0];
   const shapeMap = {
