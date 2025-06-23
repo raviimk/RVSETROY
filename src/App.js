@@ -1,7 +1,6 @@
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import PacketVerifier from './PacketVerifier';
 import './App.css';
 
 const colorMap = [
@@ -141,14 +140,14 @@ const App = () => {
           const groupPercentage = groupCent !== 0 ? (groupCarat / groupCent * 100).toFixed(2) : '0.00';
           const totalPcs = group.length;
             return `
-              <div>
-                <h3>${shape} (${type})</h3>
-                <table>
-                  <thead><tr><th>Total Pcs</th><th>Cent</th><th>Carat</th></tr></thead>
-                  <tbody><tr><td>${totalPcs}</td><td>${groupCent}</td><td>${groupCarat}</td></tr></tbody>
-                </table>
-                ${showPercentage ? `<div style="font-weight: bold; font-size: 11px;">Percentage: ${groupPercentage}%</div>` : ''}
-              </div>`;
+              <div>
+                <h3>${shape} (${type})</h3>
+                <table>
+                  <thead><tr><th>Total Pcs</th><th>Cent</th><th>Carat</th></tr></thead>
+                  <tbody><tr><td>${totalPcs}</td><td>${groupCent}</td><td>${groupCarat}</td></tr></tbody>
+                </table>
+                ${showPercentage ? `<div style="font-weight: bold; font-size: 11px;">Percentage: ${groupPercentage}%</div>` : ''}
+              </div>`;
           }).join('')}
           
           ${showPercentage ? `
@@ -167,7 +166,7 @@ const App = () => {
 
   const handleGujaratiPrint = () => {
   const last = diamonds[diamonds.length - 1];
-  if (!last) return alert("PACKET TO SCAN KAR MARA KALEJAA 💎!");
+  if (!last) return alert("કોઈ પણ પેકેટ સ્કેન થયેલ નથી!");
 
   const kapan = last.packetNo.split("-")[0];
   const shapeMap = {
@@ -233,7 +232,7 @@ const App = () => {
             ${showPercentage ? `<div style="font-size:14px;">ટકા : ${percentage}%</div>` : ''}
           </div>
           <div class="right-block">
-            ${showPercentage ? `<div>મેન : ${mainPackets}</div>` : ''}
+            <div>મેન : ${mainPackets}</div>
             <div>થાન : ${grandTotalPcs}</div>
           </div>
         </div>
@@ -308,111 +307,118 @@ const handleLoadMultipleFiles = (e) => {
     });
   });
 };
-  
-console.log(
-  setAutoMode,
-  setShowPercentage,
-  setSeparateBig,
-  handleAddClick,
-  handleManualAdd,
-  handlePrint,
-  handleGujaratiPrint,
-  handleSaveToFile,
-  handleLoadMultipleFiles
-);
-  
+
   return (
-  <Router>
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <>
-            <div className="min-h-screen bg-gradient-to-br from-slate-100 to-white p-4 text-gray-800">
-              <motion.h1 layout className="text-4xl font-extrabold mb-6 text-center text-indigo-700 drop-shadow">
-                💎 Diamond Sorter
-              </motion.h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-white p-4 text-gray-800">
+      <motion.h1 layout className="text-4xl font-extrabold mb-6 text-center text-indigo-700 drop-shadow">
+        💎 Diamond Sorter
+      </motion.h1>
 
-              <div className="text-center mb-4">
-                <a href="/packet-verifier">
-                  <button className="px-4 py-2 bg-red-600 text-white rounded shadow hover:bg-red-700 transition font-semibold">
-                    Go to Packet Verifier
-                  </button>
-                </a>
+      <div className="flex flex-col md:flex-row gap-4 justify-center items-center mb-6">
+        <label className="flex items-center gap-2">
+          <input type="checkbox" checked={autoMode} onChange={() => setAutoMode(!autoMode)} />
+          <span className="text-sm font-medium text-gray-700">Auto Scan Mode</span>
+        </label>
+        <label className="flex items-center gap-2">
+          <input type="checkbox" checked={showPercentage} onChange={() => setShowPercentage(!showPercentage)} />
+          <span className="text-sm font-medium text-gray-700"> % </span>
+        </label>
+        <label className="flex items-center gap-2">
+          <input type="checkbox" checked={separateBig} onChange={() => setSeparateBig(!separateBig)} />
+          <span className="text-sm font-medium text-gray-700">Separate Big Diamonds (Carat &gt; 0.100)</span>
+        </label>
+
+        <input type="text" ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} placeholder="Scan or paste barcode..." className="border px-3 py-2 rounded shadow focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+
+        <button onClick={handleAddClick} disabled={autoMode} className="px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 transition font-semibold">Add</button>
+
+        <button onClick={handlePrint} className="px-4 py-2 bg-indigo-600 text-white rounded shadow hover:bg-indigo-700 transition font-semibold">🧾 Print Receipt</button>
+
+        <button onClick={handleGujaratiPrint} className="px-4 py-2 bg-amber-600 text-white rounded shadow hover:bg-amber-700 transition font-semibold">🖨 Gujarati Receipt</button>
+
+        <button onClick={handleSaveToFile} className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition font-semibold">💾 Save Data</button>
+
+        <label className="px-4 py-2 bg-pink-500 text-white rounded shadow hover:bg-pink-600 transition cursor-pointer font-semibold">
+          📂 Load Multiple JSONs
+          <input type="file" accept="application/json" multiple onChange={handleLoadMultipleFiles} style={{ display: 'none' }} />
+        </label>
+      </div>
+        
+      <div className="bg-white border border-gray-300 rounded-lg shadow p-4 mb-6">
+        <h2 className="text-lg font-bold text-gray-800 mb-3">CREAT BY RAVII™</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <input type="number" step="0.001" placeholder="Cent Weight" value={manual.centWeight} onChange={(e) => setManual({ ...manual, centWeight: e.target.value })} className="border px-2 py-2 rounded shadow-sm" />
+          <input type="number" step="0.001" placeholder="Carat Weight" value={manual.caratWeight} onChange={(e) => setManual({ ...manual, caratWeight: e.target.value })} className="border px-2 py-2 rounded shadow-sm" />
+          <input type="text" placeholder="Shape" value={manual.shape} onChange={(e) => setManual({ ...manual, shape: e.target.value })} className="border px-2 py-2 rounded shadow-sm" />
+          <input type="text" placeholder="Packet No" value={manual.packetNo} onChange={(e) => setManual({ ...manual, packetNo: e.target.value })} className="border px-2 py-2 rounded shadow-sm" />
+        </div>
+        <button onClick={handleManualAdd} className="mt-4 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 shadow font-semibold transition">+ Add Manual</button>
+      </div>
+
+      <div className="grid gap-4">
+        {Object.entries(grouped).map(([key, group], i) => {
+          const [shape, type] = key.split('_');
+          const totalCent = group.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
+          const totalCarat = group.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
+          const mainPackets = group.filter(d => d.packetNo.includes('A') || !/[A-Z]/i.test(d.packetNo)).length;
+          const normalPackets = group.length - mainPackets;
+          const visiblePackets = group.slice(0, 3);
+          const colorStyle = colorMap[i % colorMap.length];
+          const isHighlighted = group.some(d => d.packetNo === highlightPacket?.packetNo);
+
+          return (
+            <motion.div
+              layout 
+              key={key} 
+              className={`rounded-xl border p-4 shadow-md relative ${colorStyle} ${isHighlighted ? 'highlight-ring' : ''}`}
+            >
+              <button
+                onClick={() => {
+                  const updated = diamonds.filter(d => !group.includes(d));
+                  setDiamonds(updated);
+                  const updatedPackets = new Set(updated.map(d => d.packetNo));
+                  setScannedPackets(updatedPackets);
+                }}
+                className="absolute top-2 right-2 text-red-600 hover:text-red-800 text-lg"
+                title="Delete this box"
+              >
+                🗑
+              </button>
+                       
+              <h3 className="text-lg font-extrabold uppercase mb-4 tracking-wide text-gray-700">
+                Box {i + 1}: <span className="text-indigo-700">{shape}</span> <span className="text-sm text-gray-600">({type})</span>
+              </h3>
+              <ul className="list-disc pl-6 text-sm mb-2">
+                {visiblePackets.map((d, idx) => (
+                  <li key={idx}>Cent: {d.centWeight} | Carat: {d.caratWeight} | Packet: {d.packetNo}</li>
+                ))}
+              </ul>
+              {group.length > 3 && (
+                <button onClick={() => toggleSummary(key)} className="text-xs text-blue-700 hover:underline mb-2">
+                  {expandedShape === key ? 'Hide Summary' : 'View Summary'}
+                </button>
+              )}
+              <AnimatePresence>
+                {expandedShape === key && (
+                  <motion.ul initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="list-disc pl-6 text-sm mb-2">
+                    {group.slice(3).map((d, idx) => (
+                      <li key={idx}>Cent: {d.centWeight} | Carat: {d.caratWeight} | Packet: {d.packetNo}</li>
+                    ))}
+                  </motion.ul>
+                )}
+              </AnimatePresence>
+              <div className="text-sm font-semibold text-gray-800">
+                Total Packets: {group.length}<br />
+                Main Packets: {mainPackets}<br />
+                Normal Packets: {normalPackets}<br />
+                Total Cent: {totalCent}, Carat: {totalCarat}
               </div>
-
-              {/* --- Rest of your content exactly as is --- */}
-
-              <div className="grid gap-4">
-                {Object.entries(grouped).map(([key, group], i) => {
-                  const [shape, type] = key.split('_');
-                  const totalCent = group.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
-                  const totalCarat = group.reduce((sum, d) => sum + d.caratWeight, 0).toFixed(3);
-                  const mainPackets = group.filter(d => d.packetNo.includes('A') || !/[A-Z]/i.test(d.packetNo)).length;
-                  const normalPackets = group.length - mainPackets;
-                  const visiblePackets = group.slice(0, 3);
-                  const colorStyle = colorMap[i % colorMap.length];
-                  const isHighlighted = group.some(d => d.packetNo === highlightPacket?.packetNo);
-
-                  return (
-                    <motion.div
-                      layout
-                      key={key}
-                      className={`rounded-xl border p-4 shadow-md relative ${colorStyle} ${isHighlighted ? 'highlight-ring' : ''}`}
-                    >
-                      <button
-                        onClick={() => {
-                          const updated = diamonds.filter(d => !group.includes(d));
-                          setDiamonds(updated);
-                          const updatedPackets = new Set(updated.map(d => d.packetNo));
-                          setScannedPackets(updatedPackets);
-                        }}
-                        className="absolute top-2 right-2 text-red-600 hover:text-red-800 text-lg"
-                        title="Delete this box"
-                      >
-                        🗑
-                      </button>
-
-                      <h3 className="text-lg font-extrabold uppercase mb-4 tracking-wide text-gray-700">
-                        Box {i + 1}: <span className="text-indigo-700">{shape}</span> <span className="text-sm text-gray-600">({type})</span>
-                      </h3>
-                      <ul className="list-disc pl-6 text-sm mb-2">
-                        {visiblePackets.map((d, idx) => (
-                          <li key={idx}>Cent: {d.centWeight} | Carat: {d.caratWeight} | Packet: {d.packetNo}</li>
-                        ))}
-                      </ul>
-                      {group.length > 3 && (
-                        <button onClick={() => toggleSummary(key)} className="text-xs text-blue-700 hover:underline mb-2">
-                          {expandedShape === key ? 'Hide Summary' : 'View Summary'}
-                        </button>
-                      )}
-                      <AnimatePresence>
-                        {expandedShape === key && (
-                          <motion.ul initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="list-disc pl-6 text-sm mb-2">
-                            {group.slice(3).map((d, idx) => (
-                              <li key={idx}>Cent: {d.centWeight} | Carat: {d.caratWeight} | Packet: {d.packetNo}</li>
-                            ))}
-                          </motion.ul>
-                        )}
-                      </AnimatePresence>
-                      <div className="text-sm font-semibold text-gray-800">
-                        Total Packets: {group.length}<br />
-                        Main Packets: {mainPackets}<br />
-                        Normal Packets: {normalPackets}<br />
-                        Total Cent: {totalCent}, Carat: {totalCarat}
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </div>
-          </>
-        }
-      />
-      <Route path="/packet-verifier" element={<PacketVerifier />} />
-    </Routes>
-  </Router>
-);
-}
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 export default App;
