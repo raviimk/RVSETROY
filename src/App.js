@@ -328,33 +328,35 @@ const handleLoadMultipleFiles = (e) => {
           <span className="text-sm font-medium text-gray-700">Separate Big Diamonds (Carat &gt; 0.100)</span>
         </label>
 
-        <input type="text" ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} placeholder="Scan or paste barcode..." className="border px-3 py-2 rounded shadow focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+       <button className="pixel-btn" onClick={handleAddClick} disabled={autoMode}>Add</button>
 
-        <button onClick={handleAddClick} disabled={autoMode} className="px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 transition font-semibold">Add</button>
+       <button className="pixel-btn" onClick={handlePrint}>🧾 Print Receipt</button>
 
-        <button onClick={handlePrint} className="px-4 py-2 bg-indigo-600 text-white rounded shadow hover:bg-indigo-700 transition font-semibold">🧾 Print Receipt</button>
+       <button className="pixel-btn" onClick={handleGujaratiPrint}>🖨 Gujarati Receipt</button>
 
-        <button onClick={handleGujaratiPrint} className="px-4 py-2 bg-amber-600 text-white rounded shadow hover:bg-amber-700 transition font-semibold">🖨 Gujarati Receipt</button>
+       <button className="pixel-btn" onClick={handleSaveToFile}>💾 Save Data</button>
 
-        <button onClick={handleSaveToFile} className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition font-semibold">💾 Save Data</button>
-
-        <label className="px-4 py-2 bg-pink-500 text-white rounded shadow hover:bg-pink-600 transition cursor-pointer font-semibold">
-          📂 Load Multiple JSONs
-          <input type="file" accept="application/json" multiple onChange={handleLoadMultipleFiles} style={{ display: 'none' }} />
+        <label className="pixel-btn cursor-pointer">
+          📂 Load Multiple JSONs
+          <input type="file" accept="application/json" multiple onChange={handleLoadMultipleFiles} style={{ display: 'none' }} />
         </label>
       </div>
         
       <div className="bg-white border border-gray-300 rounded-lg shadow p-4 mb-6">
         <h2 className="text-lg font-bold text-gray-800 mb-3">CREAT BY RAVII™</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+  
           <input type="number" step="0.001" placeholder="Cent Weight" value={manual.centWeight} onChange={(e) => setManual({ ...manual, centWeight: e.target.value })} className="border px-2 py-2 rounded shadow-sm" />
+  
           <input type="number" step="0.001" placeholder="Carat Weight" value={manual.caratWeight} onChange={(e) => setManual({ ...manual, caratWeight: e.target.value })} className="border px-2 py-2 rounded shadow-sm" />
+  
           <input type="text" placeholder="Shape" value={manual.shape} onChange={(e) => setManual({ ...manual, shape: e.target.value })} className="border px-2 py-2 rounded shadow-sm" />
+  
           <input type="text" placeholder="Packet No" value={manual.packetNo} onChange={(e) => setManual({ ...manual, packetNo: e.target.value })} className="border px-2 py-2 rounded shadow-sm" />
         </div>
-        <button onClick={handleManualAdd} className="mt-4 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 shadow font-semibold transition">+ Add Manual</button>
+        <button className="pixel-btn mt-4" onClick={handleManualAdd}>+ Add Manual</button>
       </div>
-
+  
       <div className="grid gap-4">
         {Object.entries(grouped).map(([key, group], i) => {
           const [shape, type] = key.split('_');
