@@ -1,104 +1,94 @@
-/* App.css */
+/* Body Background */
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(to bottom right, #0f172a, #1e293b);
+  background: linear-gradient(145deg, #0f0c29, #302b63, #24243e);
   color: #fff;
-  background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
-}
-
-.app {
-  padding: 10px;
-}
-
-/* Stylish input field */
-.stylish-input {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 10px 14px;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 14px;
-  width: 100%;
-  transition: border 0.3s ease;
-}
-
-.stylish-input:focus {
-  border: 1px solid #3b82f6;
-  outline: none;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-/* Pixel-style button with glow effect */
-.pixel-button {
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  overflow-x: hidden;
   position: relative;
-  padding: 10px 20px;
-  background-color: #0ea5e9;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  text-transform: uppercase;
-  cursor: pointer;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 0 2px #0ea5e9, 0 0 15px #0ea5e9;
 }
 
-.pixel-button::before {
+/* Diamond Sparkle Animation */
+body::before {
   content: "";
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background-image: radial-gradient(circle, #38bdf8 10%, transparent 10.01%);
-  background-repeat: repeat;
-  background-size: 10px 10px;
-  animation: pixelMove 4s linear infinite;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(white 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.08;
+  animation: sparkle 3s linear infinite;
   z-index: 0;
-  opacity: 0.2;
 }
 
-.pixel-button:hover {
-  background-color: #38bdf8;
-  box-shadow: 0 0 0 3px #38bdf8, 0 0 20px #38bdf8;
+@keyframes sparkle {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(10px, 10px); }
+  100% { transform: translate(0, 0); }
 }
 
-@keyframes pixelMove {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(10px, 10px);
-  }
+/* App Wrapper */
+.app {
+  position: relative;
+  padding: 20px;
+  z-index: 1;
 }
 
-/* Table for receipt */
+/* Button Style - Diamond Pixel Effect */
+button, .pixel-btn {
+  position: relative;
+  background-color: #1e90ff;
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  z-index: 1;
+}
+
+button:hover {
+  background-color: #00bcd4;
+  box-shadow: 0 0 20px rgba(0, 188, 212, 0.6);
+  transform: scale(1.05);
+}
+
+/* Receipt Table */
 .receipt-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 12px;
   margin-top: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .receipt-table th,
 .receipt-table td {
-  border: 1px solid #ccc;
-  padding: 4px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 8px;
   text-align: center;
+  color: #fff;
 }
 
+/* Summary Text */
 .receipt-summary {
   margin-top: 10px;
   font-size: 12px;
   text-align: right;
+  color: #ddd;
 }
 
-/* Box highlight style */
+/* Highlight Ring */
 .highlight-ring {
   box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.6);
   animation: pulse-glow 1.5s ease-in-out infinite;
@@ -118,14 +108,33 @@ body {
   }
 }
 
-/* Print specific settings */
+/* Inputs */
+input, select {
+  background-color: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin: 4px;
+  width: auto;
+}
+
+input::placeholder {
+  color: #ccc;
+}
+
+/* File upload */
+input[type="file"] {
+  background: none;
+  color: white;
+}
+
+/* Print Mode */
 @media print {
   body {
-    margin: 0;
-    padding: 0;
+    background: white;
+    color: black;
     font-size: 11px;
-    background: #fff;
-    color: #000;
   }
 
   .no-print {
