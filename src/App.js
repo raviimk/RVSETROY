@@ -367,7 +367,7 @@ const handleLoadMultipleFiles = (e) => {
         <button className="pixel-btn mt-4" onClick={handleManualAdd}>+ Add Manual</button>
       </div>
   
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {Object.entries(grouped).map(([key, group], i) => {
           const [shape, type] = key.split('_');
           const totalCent = group.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
@@ -380,10 +380,11 @@ const handleLoadMultipleFiles = (e) => {
 
           return (
             <motion.div
-              layout 
-              key={key} 
-              className={`rounded-xl border p-4 shadow-md relative ${colorStyle} ${isHighlighted ? 'highlight-ring' : ''}`}
+              layout
+              key={key}
+              className={`w-full rounded-xl border p-4 shadow-md relative ${colorStyle} ${isHighlighted ? 'highlight-ring' : ''}`}
             >
+
               <button
                 onClick={() => {
                   const updated = diamonds.filter(d => !group.includes(d));
