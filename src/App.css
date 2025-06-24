@@ -138,7 +138,7 @@ input[type="checkbox"] {
   height: 16px;
   accent-color: #22c55e; /* Tailwind green-500 */
   cursor: pointer;
-  appearance: auto;
+  appearance: checkbox;
   border: none;
   outline: none;
 }
