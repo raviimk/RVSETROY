@@ -132,6 +132,17 @@ select:focus {
   box-shadow: 0 0 10px #00d5ff, 0 0 5px #00ffff;
 }
 
+/* Checkbox fix */
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #22c55e; /* Tailwind green-500 */
+  cursor: pointer;
+  appearance: auto;
+  border: none;
+  outline: none;
+}
+
 /* Print Mode */
 @media print {
   body {
