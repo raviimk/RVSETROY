@@ -327,6 +327,16 @@ const handleLoadMultipleFiles = (e) => {
           <input type="checkbox" checked={separateBig} onChange={() => setSeparateBig(!separateBig)} />
           <span className="text-sm font-medium text-gray-700">Separate Big Diamonds (Carat &gt; 0.100)</span>
         </label>
+  
+        <input
+          ref={inputRef}
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Scan or type barcode..."
+          className="border px-3 py-2 rounded-lg shadow-md text-black font-semibold"
+          style={{ backgroundColor: 'white', marginRight: '10px', minWidth: '200px' }}
+        />
 
        <button className="pixel-btn" onClick={handleAddClick} disabled={autoMode}>Add</button>
 
