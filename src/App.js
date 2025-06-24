@@ -310,8 +310,11 @@ const handleLoadMultipleFiles = (e) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 to-white p-4 text-gray-800">
-      <motion.h1 layout className="text-4xl font-extrabold mb-6 text-center text-indigo-700 drop-shadow">
-        💎 Diamond Sorter
+      <motion.h1 
+        layout 
+        className="text-5xl font-black mb-8 text-center bg-gradient-to-r from-pink-500 via-indigo-600 to-blue-500 text-transparent bg-clip-text drop-shadow-lg tracking-wider animate-pulse"
+      >
+        💎 D I A M O N D &nbsp; S O R T E R 💎
       </motion.h1>
 
       <div className="flex flex-col md:flex-row gap-4 justify-center items-center mb-6">
