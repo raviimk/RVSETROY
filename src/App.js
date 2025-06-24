@@ -143,7 +143,7 @@ const App = () => {
               <div>
                 <h3>${shape} (${type})</h3>
                 <table>
-                  <thead><tr><th>Total Pcs</th><th>Cent</th><th>Carat</th></tr></thead>
+                  <thead><tr><th>Total Pcs</th><th>RO WGT</th><th>PO WGT</th></tr></thead>
                   <tbody><tr><td>${totalPcs}</td><td>${groupCent}</td><td>${groupCarat}</td></tr></tbody>
                 </table>
                 ${showPercentage ? `<div style="font-weight: bold; font-size: 11px;">Percentage: ${groupPercentage}%</div>` : ''}
@@ -424,7 +424,7 @@ const handleLoadMultipleFiles = (e) => {
                 Total Packets: {group.length}<br />
                 Main Packets: {mainPackets}<br />
                 Normal Packets: {normalPackets}<br />
-                Total Cent: {totalCent}, Carat: {totalCarat}
+                RO WGT: {totalCent}, PO WGT: {totalCarat}
               </div>
             </motion.div>
           );
