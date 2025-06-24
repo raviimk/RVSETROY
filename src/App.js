@@ -367,7 +367,7 @@ const handleLoadMultipleFiles = (e) => {
         <button className="pixel-btn mt-4" onClick={handleManualAdd}>+ Add Manual</button>
       </div>
   
-      <div className="grid gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {Object.entries(grouped).map(([key, group], i) => {
           const [shape, type] = key.split('_');
           const totalCent = group.reduce((sum, d) => sum + d.centWeight, 0).toFixed(3);
